@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include "parse.h"
 #include "base_name.h"
+#include <QSqlError>
 
 #define vec_size_init 16
 
@@ -44,40 +45,54 @@ void addcar::on_btn_add_clicked()
 
 
        // Big bad if
-    if (elem->GetFirm() == "" || elem->GetModel() == "" || elem->GetColor() == "" || elem->GetYear() <= 0 || elem->GetPower() <= 0 || elem->GetPrice() <= 0 || elem->GetOutgo() <= 0)
+    if (elem->GetFirm() == "" || elem->GetModel() == "" || elem->GetColor() == "" || elem->GetYear() < 1920 || elem->GetYear() > 2013|| elem->GetPower() < 50 || elem->GetPower() > 1001 || elem->GetPrice() <= 0 || elem->GetOutgo() <= 0)
     {
         QMessageBox::critical(this, "Ошибка", "При добавлении/изменении записи произошла ошибка. Проверьте правильность ввода данных и заполните все поля.");
         return;
     }
 
-    if (ui->btn_add->text() == "Изменить")
+    try
     {
-        QString str = "update general_car_info set firm = '" + elem->GetFirm() + "', model = '" + elem->GetModel() +
-                "', year = " + QString::number(elem->GetYear()) + ", price = " + QString::number(elem->GetPrice()) +
-                ", eng_type = '" + elem->GetEngine() + "', present = '" + elem->GetPresent() + "', power = " + QString::number(elem->GetPower()) +
-                " where id = " + QString::number(_id);
-        QSqlQuery *qr = new QSqlQuery(str, QSqlDatabase::database(work_base));
-        qr->exec();
-        str.clear();
-        str = "update full_car_info set body_type = '" + elem->GetBody() + "', drive_type = '" + elem->GetDrive() +
-                "', rudder_type = '" + elem->GetRudder() + "', color = '" + elem->GetColor() +
-                "', condition_type = '" + elem->GetCondition() + "', conditioner = " + elem->GetCond() +
-                ", tv = " + elem->GetTV() + ", navigation = " + elem->GetNavigation() + ", outgo = " +
-                QString::number(elem->GetOutgo()) + " where id_gen_car = " + QString::number(_id);
-        qr->exec(str);
-        QMessageBox::information(this, "OK", "Запись изменена.");
-        delete qr;
+        if (ui->btn_add->text() == "Изменить")
+        {
+            QString str = "update general_car_info set firm = '" + elem->GetFirm() + "', model = '" + elem->GetModel() +
+                    "', year = " + QString::number(elem->GetYear()) + ", price = " + QString::number(elem->GetPrice()) +
+                    ", eng_type = '" + elem->GetEngine() + "', present = '" + elem->GetPresent() + "', power = " + QString::number(elem->GetPower()) +
+                    " where id = " + QString::number(_id);
+            QSqlQuery *qr = new QSqlQuery(QSqlDatabase::database(work_base));
+            if (!qr->exec(str))
+                throw("Ошибка выполнения exec() для таблицы general_car_info.");
+            str.clear();
+            str = "update full_car_info set body_type = '" + elem->GetBody() + "', drive_type = '" + elem->GetDrive() +
+                    "', rudder_type = '" + elem->GetRudder() + "', color = '" + elem->GetColor() +
+                    "', condition_type = '" + elem->GetCondition() + "', conditioner = '" + elem->GetCond() +
+                    "', tv = '" + elem->GetTV() + "', navigation = '" + elem->GetNavigation() + "', outgo = " +
+                    QString::number(elem->GetOutgo()) + " where id_gen_car = " + QString::number(_id);
+            if (!qr->exec(str))
+                throw("Ошибка выполнения exec() для таблицы full_car_info.");
+            QMessageBox::information(this, "OK", "Запись изменена.");
+            delete qr;
+        }
+        else
+        {
+
+            QString general_car_info_query = elem->GetLineForGeneralTable();
+            QSqlQuery *temp = new QSqlQuery(QSqlDatabase::database(work_base));
+
+            if(!temp->exec(general_car_info_query))
+                throw(temp->lastError().text().toStdString().c_str());
+
+            int id_gen = GetMaxVal("general_car_info", "id");
+            QString full_car_info_query = elem->GetLineForFullTable(id_gen);
+            if(!temp->exec(full_car_info_query))
+                throw(temp->lastError().text().toStdString().c_str());
+
+            QMessageBox::information(this, "Ok", "Запись добавлена в базу данных.");
+        }
     }
-    else
+    catch(const char *str_err)
     {
-        int id_gen_car = GetMaxVal("full_car_info", "id_gen_car");
-        int id_full = GetMaxVal("full_car_info", "id");
-        int id_gen = GetMaxVal("general_car_info", "id");
-        QString general_car_info_query = elem->GetLineForGeneralTable(id_gen+1), full_car_info_query = elem->GetLineForFullTable(id_full+1, id_gen_car+1);
-        QSqlQuery *temp = new QSqlQuery(QSqlDatabase::database(work_base));
-        temp->exec(general_car_info_query);
-        temp->exec(full_car_info_query);
-        QMessageBox::information(this, "Ok", "Запись добавлена в базу данных.");
+        QMessageBox::critical(this, tr("Ошибка"), str_err);
     }
 }
 
@@ -86,18 +101,28 @@ int addcar::GetMaxVal(const QString &db, const QString &column)
     QSqlQuery *temp = new QSqlQuery(QSqlDatabase::database(work_base));
     QString query = "select MAX(" + column + ") from " + db;
 
-    temp->exec(query);
-    temp->next();
-    int key = temp->value(0).toInt();
+    if (!temp->exec(query))
+        throw("Ошибка выполнения exec() для поиска максимального id.");
 
-    delete temp;
-    return key;
+    if (temp->next())
+    {
+        int key = temp->value(0).toInt();
+        delete temp;
+        return key;
+    }
+    else
+    {
+        delete temp;
+        throw("Ошибка выполнения next при поиске максимального id.");
+    }
+
+    return -1;
 }
 
 bool addcar::InitElements(std::vector<std::string> vec, const int &id)
 {
     if (vec.size() != 16)
-        return false;
+        throw("Количество характеристик должно равняться 16. Ошибка.");
     ui->edt_firm->setText(QString::fromStdString(vec[0]));
     ui->edt_model->setText(QString::fromStdString(vec[1]));
     ui->edt_year->setText(QString::fromStdString(vec[2]));

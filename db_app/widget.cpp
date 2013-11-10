@@ -52,7 +52,7 @@ void Widget::on_btn_enter_clicked()
     // Проверка корректности данных авторизации
 bool Widget::Is_True_Data(QString &log, QString &pass, QString &name, QString &surname, QString &post)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", work_base);
+    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", work_base);
     db.setHostName("localhost");
     db.setDatabaseName(work_base);
     db.setUserName("yura");
@@ -63,8 +63,9 @@ bool Widget::Is_True_Data(QString &log, QString &pass, QString &name, QString &s
     else
     {
         QSqlQuery get_data_enter(db);
-        get_data_enter.exec("SELECT name, surname, post FROM data_enter where login = \'" + log + "\' and password = sha1(\'"+
-                            pass +"\')");
+        QString local_str = "SELECT name, surname, post FROM data_enter where login = \'" + log + "\' and password = crypt(\'"+
+                pass +"\', password)";
+        get_data_enter.exec(local_str);
         get_data_enter.next();
         if (!get_data_enter.value(0).isValid())
             return false;
@@ -117,8 +118,8 @@ QString Widget::GetNewPass()
 bool Widget::ChangePass(const QString &login, const QString &old_pass, const QString &new_pass)
 {
     QSqlQuery qury(QSqlDatabase::database(work_base));
-    if (!qury.exec("update data_enter set password = sha1(\'" + new_pass +"\') where login = \'" + login + "\' and password = sha(\'" +
-              old_pass + "\')"))
+    if (!qury.exec("update data_enter set password = crypt(\'" + new_pass +"\', gen_salt('md5')) where login = \'" + login + "\' and password = crypt(\'" +
+              old_pass + "\', password)"))
         return false;
 
     return true;

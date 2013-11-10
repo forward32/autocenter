@@ -19,9 +19,9 @@ public:
     void SetFirm(const QString &firm_val);
     void SetModel(const QString &model_val);
     void SetCh(const QString &ch_val = "<=");
-    void SetPower(const int &power_val = 0);
-    void SetYears(const int &start = 2006, const int &stop = 2013);
-    void SetPrice(const int &start = 0, const int &stop = MAX_PRICE);
+    void SetPower(const int &power_val = 50);
+    void SetYears(const int &start = 1920, const int &stop = 2013);
+    void SetPrice(const int &start = 1, const int &stop = MAX_PRICE);
     void SetPresent(const QString &pr_val);
         //Get values from parametrs
     int GetPower() const;

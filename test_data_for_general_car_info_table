@@ -1,30 +1,30 @@
-null	bmw	523	2008	190	780000	tg	Yes
-null	bmw	325	2012	230	1200000	td	Yes
-null	bmw	113	2013	180	1060000	d	Yes
-null	bmw	340	2012	245	1320000	tg	No
-null	mazda	3	2010	125	650000	td	No
-null	mazda	6	2011	180	800000	tg	Yes
-null	mercedes-benz	s500	2010	480	2100000	tg	No
-null	opel	astra	2007	135	460000	d	Yes
-null	opel	zafira	2008	115	520000	td	Yes
-null	lada	calina	2011	98	420000	i	No
-null	lada	priora	2012	115	450000	i	No
-null	lada	calina	2009	112	250000	i	Yes
-null	lada	priora	2010	115	280000	i	Yes
-null	ford	fusion	2008	90	450000	i	Yes
-null	ford	fusion	2009	125	480000	d	No
-null	ford	mondeo	2010	147	650000	i	Yes
-null	ford	mondeo	2009	190	670000	td	No
-null	ford	fiesta	2009	80	450000	d	Yes
-null	audi	q5	2010	230	1100000	td	Yes
-null	audi	q5	2010	170	1000000	d	No
-null	audi	q7	2008	287	1300000	td	Yes
-null	audi	q7	2009	190	1230000	d	Yes
-null	audi	q7	2010	225	1340000	tg	No
-null	audi	a3	2008	140	500000	i	Yes
-null	audi	a4	2009	180	700000	td	Yes
-null	audi	a6	2010	145	890000	i	Yes
-null	kia	optima	2013	180	1300000	i	Yes
-null	kia	cerato	2012	135	700000	i	Yes
-null	kia	ceed	2012	90	620000	i	Yes
-null	kia	ceed	2013	130	720000	i	No
+bmw	523	2008	190	780000	бензин-турбина	Да
+bmw	325	2012	230	1200000	турбодизель	Да
+bmw	113	2013	180	1060000	дизель	Да
+bmw	340	2012	245	1320000	бензин-турбина	Нет
+mazda	3	2010	125	650000	турбодизель	Нет
+mazda	6	2011	180	800000	бензин-турбина	Да
+mercedes-benz	s500	2010	480	2100000	бензин-турбина	Нет
+opel	astra	2007	135	460000	дизель	Да
+opel	zafira	2008	115	520000	турбодизель	Да
+lada	calina	2011	98	420000	инжектор	Нет
+lada	priora	2012	115	450000	инжектор	Нет
+lada	calina	2009	112	250000	инжектор	Да
+lada	priora	2010	115	280000	инжектор	Да
+ford	fusion	2008	90	450000	инжектор	Да
+ford	fusion	2009	125	480000	дизель	Нет
+ford	mondeo	2010	147	650000	инжектор	Да
+ford	mondeo	2009	190	670000	турбодизель	Нет
+ford	fiesta	2009	80	450000	дизель	Да
+audi	q5	2010	230	1100000	турбодизель	Да
+audi	q5	2010	170	1000000	дизель	Нет
+audi	q7	2008	287	1300000	турбодизель	Да
+audi	q7	2009	190	1230000	дизель	Да
+audi	q7	2010	225	1340000	бензин-турбина	Нет
+audi	a3	2008	140	500000	инжектор	Да
+audi	a4	2009	180	700000	турбодизель	Да
+audi	a6	2010	145	890000	инжектор	Да
+kia	optima	2013	180	1300000	инжектор	Да
+kia	cerato	2012	135	700000	инжектор	Да
+kia	ceed	2012	90	620000	инжектор	Да
+kia	ceed	2013	130	720000	инжектор	Нет

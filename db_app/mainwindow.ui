@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
-    <height>567</height>
+    <width>981</width>
+    <height>581</height>
    </rect>
   </property>
   <property name="palette">
@@ -436,7 +436,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>581</width>
+     <width>661</width>
      <height>131</height>
     </rect>
    </property>
@@ -866,7 +866,7 @@
      <rect>
       <x>0</x>
       <y>20</y>
-      <width>571</width>
+      <width>651</width>
       <height>103</height>
      </rect>
     </property>
@@ -1158,9 +1158,9 @@
   <widget class="QGroupBox" name="UserDataBox">
    <property name="geometry">
     <rect>
-     <x>610</x>
+     <x>690</x>
      <y>10</y>
-     <width>231</width>
+     <width>261</width>
      <height>131</height>
     </rect>
    </property>
@@ -1617,8 +1617,8 @@
     <rect>
      <x>10</x>
      <y>220</y>
-     <width>831</width>
-     <height>341</height>
+     <width>941</width>
+     <height>351</height>
     </rect>
    </property>
    <property name="alternatingRowColors">
@@ -1633,13 +1633,16 @@
    <property name="gridStyle">
     <enum>Qt::SolidLine</enum>
    </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>112</number>
+   </attribute>
   </widget>
   <widget class="QGroupBox" name="grbactions">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>150</y>
-     <width>831</width>
+     <width>941</width>
      <height>61</height>
     </rect>
    </property>
@@ -2080,8 +2083,8 @@
    <widget class="QLabel" name="lbl_finded">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>24</y>
+      <x>300</x>
+      <y>0</y>
       <width>191</width>
       <height>17</height>
      </rect>
@@ -2093,13 +2096,27 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>0</y>
-      <width>572</width>
+      <x>7</x>
+      <y>30</y>
+      <width>931</width>
       <height>29</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QPushButton" name="btn_del">
+       <property name="text">
+        <string>Удалить</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_change">
+       <property name="text">
+        <string>Изменить</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="btn_see_stat">
        <property name="text">
@@ -2129,32 +2146,6 @@
       </widget>
      </item>
     </layout>
-   </widget>
-   <widget class="QPushButton" name="btn_del">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>30</y>
-      <width>128</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Удалить</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_change">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>30</y>
-      <width>128</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Изменить</string>
-    </property>
    </widget>
   </widget>
  </widget>

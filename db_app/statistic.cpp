@@ -67,6 +67,7 @@ void statistic::on_btn_search_clicked()
 
 void statistic::on_stat_tbl_clicked(const QModelIndex &index)
 {
+    (void)index;
     int row = ui->stat_tbl->selectionModel()->currentIndex().column();
     if (row == 7)
     {

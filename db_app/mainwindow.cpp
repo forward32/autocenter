@@ -10,20 +10,23 @@
 #include <QTime>
 #include "contract.h"
 #include "start_filling_table.h"
-
+#include <QSqlError>
 
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->cmbstart->setCurrentText("1920");
+    ui->cmbstop->setCurrentText("2013");
     StartInit();
+    ui->CarsTable->setSortingEnabled(true);
 }
 
     // Init table how program starting
 void MainWindow::StartInit()
 {
-    QString query = "select * from general_car_info";
+    QString query = "select * from general_car_info order by id";
     std::vector<std::string> vec;
     vec.push_back("№ в базе");
     vec.push_back("Марка");
@@ -39,7 +42,7 @@ void MainWindow::StartInit()
     int count = Filling::GetCount("general_car_info");
     if (count == -1)
     {
-        QMessageBox::critical(this, "Error", "Записей в базе не обнаружено.");
+        QMessageBox::critical(this, "Ошибка", "Записей в базе не обнаружено.");
         return;
     }
 
@@ -76,54 +79,58 @@ QString MainWindow::GetSellerSurName() const
 void MainWindow::on_btn_search_car_clicked()
 {
         // prepare data for search
-    Search *temp_search = new Search();
-    temp_search->SetFirm(ui->edtfirm->text());
-    temp_search->SetModel(ui->edtmodel->text());
-    temp_search->SetYears(ui->cmbstart->currentText().toInt(), ui->cmbstop->currentText().toInt());
-    temp_search->SetPower(ui->edtpower->text().toInt());
-    temp_search->SetPrice(ui->edt_start_price->text().toInt(), ui->edt_stop_price->text().toInt());
-    if (ui->check_present->isChecked()) temp_search->SetPresent("Yes");
-    else temp_search->SetPresent("No");
-
-    if ((temp_search->GetPower() <= 0 || temp_search->GetPower() >= 1001) && ui->edtpower->text() != "")
+    try
     {
-        QMessageBox::critical(this, "Ошибка", "Проверьте правильность ввода мощности. Мощность не должна быть отрицательной величиной или текстом.");
-        return;
+        Search *temp_search = new Search();
+        temp_search->SetFirm(ui->edtfirm->text());
+        temp_search->SetModel(ui->edtmodel->text());
+        temp_search->SetYears(ui->cmbstart->currentText().toInt(), ui->cmbstop->currentText().toInt());
+        temp_search->SetPower(ui->edtpower->text().toInt());
+        temp_search->SetPrice(ui->edt_start_price->text().toInt(), ui->edt_stop_price->text().toInt());
+        if (ui->check_present->isChecked()) temp_search->SetPresent("Yes");
+        else temp_search->SetPresent("No");
+
+        if ((temp_search->GetPower() < 50 || temp_search->GetPower() > 1001) && ui->edtpower->text() != "")
+            throw("Проверьте правильность ввода мощности. Мощность не должна быть отрицательной величиной или текстом.");
+
+        if (ui->chbox_from->isChecked())
+            temp_search->SetCh(">=");
+        else
+            if (ui->edtpower->text() == "")
+                throw("Если вы меняете флаг \"от-до\", укажите границу мощности искомых записей.");
+             else
+                temp_search->SetCh("<=");
+
+            // update data in table
+        QString query = temp_search->GetSearchQuery();
+        QSqlQueryModel *queryModel = (QSqlQueryModel *)ui->CarsTable->model();
+            // do query and check results
+        int count = 0;
+        queryModel->setQuery(query, QSqlDatabase::database(work_base));
+        count = ui->CarsTable->model()->rowCount();
+        if (count == 0)
+            QMessageBox::information(this, "Ок", "К сожалению, поиск не дал результатов. Измените параметры поиска.");
+        ui->lbl_finded->setText("Найдено записей: " + QString::number(count));
+        delete temp_search;
     }
 
-    if (ui->chbox_from->isChecked())
-        temp_search->SetCh(">=");
-    else
-        if (ui->edtpower->text() == ""){
-            QMessageBox::critical(this, "Ошибка", "Если вы меняете флаг \"от-до\", укажите границу мощности искомых записей.");
-            return;
-        }
-         else temp_search->SetCh("<=");
-
-        // update data in table
-    QString query = temp_search->GetSearchQuery();
-    QSqlQueryModel *queryModel = (QSqlQueryModel *)ui->CarsTable->model();
-        // do query and check results
-    int count = 0;
-    queryModel->setQuery(query, QSqlDatabase::database(work_base));
-    count = ui->CarsTable->model()->rowCount();
-    if (count == 0)
-        QMessageBox::information(this, "Ок", "К сожалению, поиск не дал результатов. Измените параметры поиска.");
-    ui->lbl_finded->setText("Найдено записей: " + QString::number(count));
-    delete temp_search;
+    catch(const char *str_err)
+    {
+        QMessageBox::critical(this, tr("Ошибка"), str_err);
+    }
 }
 
 void MainWindow::on_CarsTable_clicked(const QModelIndex &index)
 {
+    (void)index;
     int row = ui->CarsTable->selectionModel()->currentIndex().column();
     if (row == 0)
     {
         Extra *temp = new Extra(ui->CarsTable->selectionModel()->currentIndex().data().toInt());
         QString query_str = temp->GetFullCarData();
         delete temp;
-        QSqlQuery *query = new QSqlQuery(QSqlDatabase::database("autocenter"));
-        query->exec(query_str);
-        if (query)
+        QSqlQuery *query = new QSqlQuery(QSqlDatabase::database(work_base));
+        if ( query->exec(query_str))
         {
             Parse *prs = new Parse();
             QString str = prs->ParseDataFull(query);
@@ -169,9 +176,16 @@ void MainWindow::on_btn_add_car_clicked()
         //################Create contract##############################
 void MainWindow::on_btn_get_contract_clicked()
 {
-    contract *data_contract = new contract();
-    data_contract->SetFlag(false);
-    data_contract->NewShowCar(this);
+    try
+    {
+        contract *data_contract = new contract();
+        data_contract->SetFlag(false);
+        data_contract->NewShowCar(this);
+    }
+    catch(const char * str_err)
+    {
+        QMessageBox::critical(this, tr("Ошибка"), str_err);
+    }
 }
 
 void MainWindow::FillData(const QString &_name, const QString &_otch, const QString &_surname,
@@ -308,7 +322,7 @@ bool MainWindow::CreateDetailFile(const int &_id)
 
     WriteToSalesDetail(sale_data, sale_time, query, GetSellerName(), GetSellerSurName(), count_for_detail);
 
-    for_write = "<Данные об детали>\n\Наименование: "+query->value(1).toString()+"\nФирма-производитель: "+
+    for_write = "<Данные об детали>\nНаименование: "+query->value(1).toString()+"\nФирма-производитель: "+
             query->value(3).toString()+"\nЦена за штуку: "+query->value(2).toString()+"\n";
     for_write += "Количество проданных деталей: " + QString::number(count_for_detail) + "\n";
     for_write += "_________________________________________________________________\n\n";
@@ -364,70 +378,88 @@ void MainWindow::on_btn_see_stat_clicked()
 
 void MainWindow::on_btn_del_clicked()
 {
-    int row = ui->CarsTable->selectionModel()->currentIndex().column();
-    if (row == 0)
+    try
     {
-        int val = ui->CarsTable->selectionModel()->currentIndex().data().toInt();
-        if (QMessageBox::information(this, "Вы уверены?", "Вы точно хотите удалить запись с ID="+QString::number(val),
-                                 QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok)
+        int row = ui->CarsTable->selectionModel()->currentIndex().column();
+        if (row == 0)
         {
-            Extra * tmp = new Extra();
-            tmp->DeleteRecord("full_car_info", "id_gen_car", val);
-            tmp->DeleteRecord("general_car_info", "id", val);
-            QMessageBox::information(this, "OK", "Запись успешно удалена.");
-            StartInit();
+            int val = ui->CarsTable->selectionModel()->currentIndex().data().toInt();
+            if (QMessageBox::information(this, "Вы уверены?", "Вы точно хотите удалить запись с ID="+QString::number(val),
+                                     QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok)
+            {
+                Extra * tmp = new Extra();
+                tmp->DeleteRecord("full_car_info", "id_gen_car", val);
+                tmp->DeleteRecord("general_car_info", "id", val);
+                QMessageBox::information(this, "OK", "Запись успешно удалена.");
+                StartInit();
+            }
         }
+        else
+            QMessageBox::information(this, "OK", "Для удаления записи щелкните по номеру в базе.");
     }
-    else
-        QMessageBox::information(this, "OK", "Для удаления записи щелкните по номеру в базе.");
+    catch(const char *str_err)
+    {
+        QMessageBox::critical(this, tr("Ошибка"), str_err);
+    }
 }
 
     // big-bad function change of data
-void MainWindow::on_btn_change_clicked(bool checked)
+void MainWindow::on_btn_change_clicked()
 {
     int row = ui->CarsTable->selectionModel()->currentIndex().column();
     if (row == 0)
     {
         int val = ui->CarsTable->selectionModel()->currentIndex().data().toInt();
-        if (QMessageBox::information(this, "Вы уверены?", "Вы точно хотите удалить запись с ID="+QString::number(val),
+        if (QMessageBox::information(this, "Вы уверены?", "Вы точно хотите изменить запись с ID="+QString::number(val),
                                  QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok)
         {
-            std::vector<std::string> vec;
-            QSqlQuery *qr = new QSqlQuery("select firm, model, year, power, price, eng_type, present from general_car_info where id="
-                                          + QString::number(val), QSqlDatabase::database(work_base));
-            qr->exec();
-            qr->next();
-            if (qr->isValid())
+            try
             {
-                vec.push_back(qr->value(0).toString().toStdString());
-                vec.push_back(qr->value(1).toString().toStdString());
-                vec.push_back(qr->value(2).toString().toStdString());
-                vec.push_back(qr->value(3).toString().toStdString());
-                vec.push_back(qr->value(4).toString().toStdString());
-                vec.push_back(qr->value(5).toString().toStdString());
-                vec.push_back(qr->value(6).toString().toStdString());
+                std::vector<std::string> vec;
+                QSqlQuery *qr = new QSqlQuery(QSqlDatabase::database(work_base));
+                QString local_str = "select firm, model, year, power, price, eng_type, present from general_car_info where id="+
+                                              QString::number(val);
+                if (!qr->exec(local_str))
+                    throw(qr->lastError().text().toStdString().c_str());
+
+                if (qr->next())
+                {
+                    vec.push_back(qr->value(0).toString().toStdString());
+                    vec.push_back(qr->value(1).toString().toStdString());
+                    vec.push_back(qr->value(2).toString().toStdString());
+                    vec.push_back(qr->value(3).toString().toStdString());
+                    vec.push_back(qr->value(4).toString().toStdString());
+                    vec.push_back(qr->value(5).toString().toStdString());
+                    vec.push_back(qr->value(6).toString().toStdString());
+                }
+                else
+                    throw("Не валидные данные, полученные из таблицы general_car_info. Ошибка.");
+
+                qr->exec("select body_type, drive_type, rudder_type, color, condition_type, conditioner, tv, navigation, outgo from full_car_info where id_gen_car = " + QString::number(val));
+                qr->next();
+                if (qr->isValid())
+                {
+                    vec.push_back(qr->value(0).toString().toStdString());
+                    vec.push_back(qr->value(1).toString().toStdString());
+                    vec.push_back(qr->value(2).toString().toStdString());
+                    vec.push_back(qr->value(3).toString().toStdString());
+                    vec.push_back(qr->value(4).toString().toStdString());
+                    vec.push_back(qr->value(5).toString().toStdString());
+                    vec.push_back(qr->value(6).toString().toStdString());
+                    vec.push_back(qr->value(7).toString().toStdString());
+                    vec.push_back(qr->value(8).toString().toStdString());
+                }
+                else
+                    throw("Не валидные данные, полученные из таблицы full_car_info. Ошибка.");
+
+                addcar *temp = new addcar();
+                temp->InitElements(vec, val);
+                temp->show();
             }
-            else
-                return;
-            qr->exec("select body_type, drive_type, rudder_type, color, condition_type, conditioner, tv, navigation, outgo from full_car_info where id_gen_car = " + QString::number(val));
-            qr->next();
-            if (qr->isValid())
+            catch(const char *str_err)
             {
-                vec.push_back(qr->value(0).toString().toStdString());
-                vec.push_back(qr->value(1).toString().toStdString());
-                vec.push_back(qr->value(2).toString().toStdString());
-                vec.push_back(qr->value(3).toString().toStdString());
-                vec.push_back(qr->value(4).toString().toStdString());
-                vec.push_back(qr->value(5).toString().toStdString());
-                vec.push_back(qr->value(6).toString().toStdString());
-                vec.push_back(qr->value(7).toString().toStdString());
-                vec.push_back(qr->value(8).toString().toStdString());
+                QMessageBox::critical(this, tr("OK"), str_err);
             }
-            else
-                return;
-            addcar *temp = new addcar();
-            temp->InitElements(vec, val);
-            temp->show();
         }
     }
     else

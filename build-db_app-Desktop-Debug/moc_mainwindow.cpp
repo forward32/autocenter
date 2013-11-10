@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[16];
-    char stringdata[294];
+    QByteArrayData data[15];
+    char stringdata[273];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -41,10 +41,9 @@ QT_MOC_LITERAL(8, 127, 20),
 QT_MOC_LITERAL(9, 148, 22),
 QT_MOC_LITERAL(10, 171, 27),
 QT_MOC_LITERAL(11, 199, 23),
-QT_MOC_LITERAL(12, 223, 20),
-QT_MOC_LITERAL(13, 244, 18),
-QT_MOC_LITERAL(14, 263, 21),
-QT_MOC_LITERAL(15, 285, 7)
+QT_MOC_LITERAL(12, 223, 18),
+QT_MOC_LITERAL(13, 242, 21),
+QT_MOC_LITERAL(14, 264, 7)
     },
     "MainWindow\0on_btn_search_car_clicked\0"
     "\0on_CarsTable_clicked\0index\0"
@@ -52,9 +51,8 @@ QT_MOC_LITERAL(15, 285, 7)
     "on_chbox_to_clicked\0on_btn_reset_clicked\0"
     "on_btn_add_car_clicked\0"
     "on_btn_get_contract_clicked\0"
-    "on_btn_see_stat_clicked\0on_CarsTable_pressed\0"
-    "on_btn_del_clicked\0on_btn_change_clicked\0"
-    "checked\0"
+    "on_btn_see_stat_clicked\0on_btn_del_clicked\0"
+    "on_btn_change_clicked\0checked\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -64,7 +62,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -72,19 +70,18 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   79,    2, 0x08,
-       3,    1,   80,    2, 0x08,
-       5,    0,   83,    2, 0x08,
-       6,    0,   84,    2, 0x08,
-       7,    0,   85,    2, 0x08,
-       8,    0,   86,    2, 0x08,
-       9,    0,   87,    2, 0x08,
-      10,    0,   88,    2, 0x08,
-      11,    0,   89,    2, 0x08,
-      12,    1,   90,    2, 0x08,
-      13,    0,   93,    2, 0x08,
-      14,    0,   94,    2, 0x08,
-      14,    1,   95,    2, 0x08,
+       1,    0,   74,    2, 0x08,
+       3,    1,   75,    2, 0x08,
+       5,    0,   78,    2, 0x08,
+       6,    0,   79,    2, 0x08,
+       7,    0,   80,    2, 0x08,
+       8,    0,   81,    2, 0x08,
+       9,    0,   82,    2, 0x08,
+      10,    0,   83,    2, 0x08,
+      11,    0,   84,    2, 0x08,
+      12,    0,   85,    2, 0x08,
+      13,    0,   86,    2, 0x08,
+      13,    1,   87,    2, 0x08,
 
  // slots: parameters
     QMetaType::Void,
@@ -96,10 +93,9 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QModelIndex,    4,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Bool,   15,
+    QMetaType::Void, QMetaType::Bool,   14,
 
        0        // eod
 };
@@ -118,10 +114,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 6: _t->on_btn_add_car_clicked(); break;
         case 7: _t->on_btn_get_contract_clicked(); break;
         case 8: _t->on_btn_see_stat_clicked(); break;
-        //case 9: _t->on_CarsTable_pressed((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
-        case 10: _t->on_btn_del_clicked(); break;
-        //case 11: _t->on_btn_change_clicked(); break;
-        case 12: _t->on_btn_change_clicked((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 9: _t->on_btn_del_clicked(); break;
+        case 10: _t->on_btn_change_clicked(); break;
         default: ;
         }
     }
@@ -152,13 +146,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 13)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 13;
+        _id -= 12;
     }
     return _id;
 }

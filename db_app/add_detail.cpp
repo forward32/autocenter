@@ -4,7 +4,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include "base_name.h"
-#include "addcar.h"
+#include <QSqlError>
 
 add_detail::add_detail(QWidget *parent) :
     QWidget(parent),
@@ -25,46 +25,55 @@ void add_detail::on_btn_exit_clicked()
 
 void add_detail::on_btn_apply_clicked()
 {
-    std::vector<QString> vec;
-    vec.push_back(ui->edt_name->text());
-    vec.push_back(ui->edt_firm->text());
-    vec.push_back(ui->edt_type->text());
-    vec.push_back(ui->edt_price->text());
-    vec.push_back(ui->text_info->toPlainText());
-    if (vec[0] == "" || vec[1] == "" || vec[2] == "" || vec[3] == "" || vec[4] == "")
+    try
     {
-        QMessageBox::critical(this, "Error", "Ошибка ввода данных. Проверьте правильность ввода и заполните все поля");
-        return;
-    }
+        std::vector<QString> vec;
+        vec.push_back(ui->edt_name->text());
+        vec.push_back(ui->edt_firm->text());
+        vec.push_back(ui->edt_type->text());
+        vec.push_back(ui->edt_price->text());
+        vec.push_back(ui->text_info->toPlainText());
+        if (vec[0] == "" || vec[1] == "" || vec[2] == "" || vec[3] == "" || vec[4] == "")
+            throw("Ошибка ввода данных. Проверьте правильность ввода и заполните все поля");
 
-    if (ui->btn_apply->text() == "Изменить")
-    {
-        QString str = "update details_info set name = '" + vec[0] + "', firm = '" + vec[1] + "', type = '" +
-                vec[2] + "', price = " + vec[3] + ", info = '" + vec[4] + "' where id = " + QString::number(_id);
-        QSqlQuery *qr = new QSqlQuery(str, QSqlDatabase::database(work_base));
-        qr->exec();
-        delete qr;
-        QMessageBox::information(this, "OK", "Запись изменена.");
-    }
-    else
-        if (ui->btn_apply->text() == "Добавить")
+        if (ui->btn_apply->text() == "Изменить")
         {
-            addcar *car = new addcar();
-            int max = car->GetMaxVal("details_info", "id");
-            delete car;
-            QString str = "insert into details_info values(" + QString::number(max+1) + ",'" + vec[0] + "', " +vec[3] + ", '" + vec[1] + "', '" +
-                    vec[2] + "','" + vec[4] +"')";
-            QSqlQuery *qr = new QSqlQuery(str, QSqlDatabase::database(work_base));
-            qr->exec();
+            QString str = "update details_info set name = '" + vec[0] + "', firm = '" + vec[1] + "', type = '" +
+                    vec[2] + "', price = " + vec[3] + ", info = '" + vec[4] + "' where id = " + QString::number(_id);
+            QSqlQuery *qr = new QSqlQuery(QSqlDatabase::database(work_base));
+            if(!qr->exec(str))
+            {
+                delete qr;
+                throw qr->lastError().text().toStdString().c_str();
+            }
             delete qr;
-            QMessageBox::information(this, "OK", "Запись успешно добавлена в базу.");
+            QMessageBox::information(this, "OK", "Запись изменена.");
         }
+        else
+            if (ui->btn_apply->text() == "Добавить")
+            {
+                QString str = "insert into details_info (name, price, firm, type, info) values('" + vec[0] + "', " +vec[3] + ", '" + vec[1] + "', '" +
+                        vec[2] + "','" + vec[4] +"')";
+                QSqlQuery *qr = new QSqlQuery(QSqlDatabase::database(work_base));
+                if(!qr->exec(str))
+                {
+                    delete qr;
+                    throw qr->lastError().text().toStdString().c_str();
+                }
+                delete qr;
+                QMessageBox::information(this, "OK", "Запись успешно добавлена в базу.");
+            }
+    }
+    catch(const char *str_err)
+    {
+        QMessageBox::critical(this, tr("Oшибка"), str_err);
+    }
 }
 
 void add_detail::SetParmsOnForm(const std::vector<QString> &vec, const int &id)
 {
     if (vec.size() != 5)
-        return;
+        throw ("Ошибка. Количество параметров не равно 5.");
     ui->edt_name->setText(vec[0]);
     ui->edt_price->setText(vec[1]);
     ui->edt_firm->setText(vec[2]);

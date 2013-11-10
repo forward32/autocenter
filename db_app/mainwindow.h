@@ -53,13 +53,9 @@ private slots:
 
     void on_btn_see_stat_clicked();
 
-    void on_CarsTable_pressed(const QModelIndex &index);
-
     void on_btn_del_clicked();
 
     void on_btn_change_clicked();
-
-    void on_btn_change_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;

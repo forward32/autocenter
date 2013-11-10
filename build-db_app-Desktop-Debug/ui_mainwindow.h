@@ -66,18 +66,18 @@ public:
     QLabel *lbl_finded;
     QWidget *layoutWidget1;
     QHBoxLayout *horizontalLayout_4;
+    QPushButton *btn_del;
+    QPushButton *btn_change;
     QPushButton *btn_see_stat;
     QPushButton *btn_get_contract;
     QPushButton *btn_add_car;
     QPushButton *btn_reset;
-    QPushButton *btn_del;
-    QPushButton *btn_change;
 
     void setupUi(QWidget *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(846, 567);
+        MainWindow->resize(981, 581);
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -142,7 +142,7 @@ public:
         MainWindow->setAutoFillBackground(false);
         SearchBox = new QGroupBox(MainWindow);
         SearchBox->setObjectName(QStringLiteral("SearchBox"));
-        SearchBox->setGeometry(QRect(10, 10, 581, 131));
+        SearchBox->setGeometry(QRect(10, 10, 661, 131));
         QPalette palette1;
         palette1.setBrush(QPalette::Active, QPalette::WindowText, brush);
         QBrush brush7(QColor(244, 244, 244, 255));
@@ -201,7 +201,7 @@ public:
         SearchBox->setAutoFillBackground(true);
         layoutWidget = new QWidget(SearchBox);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(0, 20, 571, 103));
+        layoutWidget->setGeometry(QRect(0, 20, 651, 103));
         verticalLayout_2 = new QVBoxLayout(layoutWidget);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -339,7 +339,7 @@ public:
 
         UserDataBox = new QGroupBox(MainWindow);
         UserDataBox->setObjectName(QStringLiteral("UserDataBox"));
-        UserDataBox->setGeometry(QRect(610, 10, 231, 131));
+        UserDataBox->setGeometry(QRect(690, 10, 261, 131));
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette2.setBrush(QPalette::Active, QPalette::Button, brush7);
@@ -396,14 +396,15 @@ public:
         userdata->setGeometry(QRect(20, 40, 161, 17));
         CarsTable = new QTableView(MainWindow);
         CarsTable->setObjectName(QStringLiteral("CarsTable"));
-        CarsTable->setGeometry(QRect(10, 220, 831, 341));
+        CarsTable->setGeometry(QRect(10, 220, 941, 351));
         CarsTable->setAlternatingRowColors(true);
         CarsTable->setSelectionMode(QAbstractItemView::ExtendedSelection);
         CarsTable->setTextElideMode(Qt::ElideNone);
         CarsTable->setGridStyle(Qt::SolidLine);
+        CarsTable->horizontalHeader()->setDefaultSectionSize(112);
         grbactions = new QGroupBox(MainWindow);
         grbactions->setObjectName(QStringLiteral("grbactions"));
-        grbactions->setGeometry(QRect(10, 150, 831, 61));
+        grbactions->setGeometry(QRect(10, 150, 941, 61));
         QPalette palette3;
         palette3.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette3.setBrush(QPalette::Active, QPalette::Button, brush7);
@@ -457,13 +458,23 @@ public:
         lbl_all_records->setGeometry(QRect(10, 0, 231, 17));
         lbl_finded = new QLabel(grbactions);
         lbl_finded->setObjectName(QStringLiteral("lbl_finded"));
-        lbl_finded->setGeometry(QRect(11, 24, 191, 17));
+        lbl_finded->setGeometry(QRect(300, 0, 191, 17));
         layoutWidget1 = new QWidget(grbactions);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(250, 0, 572, 29));
+        layoutWidget1->setGeometry(QRect(7, 30, 931, 29));
         horizontalLayout_4 = new QHBoxLayout(layoutWidget1);
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        btn_del = new QPushButton(layoutWidget1);
+        btn_del->setObjectName(QStringLiteral("btn_del"));
+
+        horizontalLayout_4->addWidget(btn_del);
+
+        btn_change = new QPushButton(layoutWidget1);
+        btn_change->setObjectName(QStringLiteral("btn_change"));
+
+        horizontalLayout_4->addWidget(btn_change);
+
         btn_see_stat = new QPushButton(layoutWidget1);
         btn_see_stat->setObjectName(QStringLiteral("btn_see_stat"));
 
@@ -484,12 +495,6 @@ public:
 
         horizontalLayout_4->addWidget(btn_reset);
 
-        btn_del = new QPushButton(grbactions);
-        btn_del->setObjectName(QStringLiteral("btn_del"));
-        btn_del->setGeometry(QRect(310, 30, 128, 27));
-        btn_change = new QPushButton(grbactions);
-        btn_change->setObjectName(QStringLiteral("btn_change"));
-        btn_change->setGeometry(QRect(440, 30, 128, 27));
 
         retranslateUi(MainWindow);
 
@@ -561,12 +566,12 @@ public:
         grbactions->setTitle(QString());
         lbl_all_records->setText(QApplication::translate("MainWindow", "\320\222\321\201\320\265\320\263\320\276 \320\267\320\260\320\277\320\270\321\201\320\265\320\271 \320\262 \320\272\320\260\321\202\320\260\320\273\320\276\320\263\320\265:", 0));
         lbl_finded->setText(QApplication::translate("MainWindow", "\320\235\320\260\320\271\320\264\320\265\320\275\320\276 \320\267\320\260\320\277\320\270\321\201\320\265\320\271: 0", 0));
+        btn_del->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
+        btn_change->setText(QApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\320\275\320\270\321\202\321\214", 0));
         btn_see_stat->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\321\200\320\276\320\264\320\260\320\266", 0));
         btn_get_contract->setText(QApplication::translate("MainWindow", "\320\236\321\204\320\276\321\200\320\274\320\270\321\202\321\214 \320\267\320\260\320\272\320\260\320\267", 0));
         btn_add_car->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\260\320\262\321\202\320\276\320\274\320\276\320\261\320\270\320\273\321\214", 0));
         btn_reset->setText(QApplication::translate("MainWindow", "\320\222\320\265\321\201\321\214 \320\272\320\260\321\202\320\260\320\273\320\276\320\263", 0));
-        btn_del->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
-        btn_change->setText(QApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\320\275\320\270\321\202\321\214", 0));
     } // retranslateUi
 
 };

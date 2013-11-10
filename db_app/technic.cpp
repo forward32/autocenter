@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include "detail_stat.h"
 #include <QInputDialog>
+#include <QSqlError>
 
 technic::technic(QWidget *parent) :
     QWidget(parent),
@@ -37,7 +38,7 @@ void technic::ShowForm(const QString &name, const QString &surname)
 
 void technic::StartInit()
 {
-    QString query = "select * from details_info";
+    QString query = "select * from details_info order by id";
     std::vector<std::string> vec;
     vec.push_back("№ в базе");
     vec.push_back("Наименование");
@@ -79,6 +80,7 @@ void technic::on_btn_start_clicked()
 
 void technic::on_tbl_details_clicked(const QModelIndex &index)
 {
+    (void)index;
     int column = ui->tbl_details->selectionModel()->currentIndex().column();
     if (column == 5)
     {
@@ -93,21 +95,28 @@ void technic::on_tbl_details_clicked(const QModelIndex &index)
 
 void technic::on_btn_del_clicked()
 {
-    int row = ui->tbl_details->selectionModel()->currentIndex().column();
-    if (row == 0)
+    try
     {
-        int val = this->ui->tbl_details->selectionModel()->currentIndex().data().toInt();
-        if (QMessageBox::information(this, "Вы уверены?", "Вы точно хотите удалить запись с ID="+QString::number(val),
-                                 QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok)
+        int row = ui->tbl_details->selectionModel()->currentIndex().column();
+        if (row == 0)
         {
-            Extra * tmp = new Extra();
-            tmp->DeleteRecord("details_info", "id", val);
-            QMessageBox::information(this, "OK", "Запись успешно удалена.");
-            StartInit();
+            int val = this->ui->tbl_details->selectionModel()->currentIndex().data().toInt();
+            if (QMessageBox::information(this, "Вы уверены?", "Вы точно хотите удалить запись с ID="+QString::number(val),
+                                     QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok)
+            {
+                Extra * tmp = new Extra();
+                tmp->DeleteRecord("details_info", "id", val);
+                QMessageBox::information(this, "OK", "Запись успешно удалена.");
+                StartInit();
+            }
         }
+        else
+            QMessageBox::information(this, "OK", "Для удаления записи щелкните по номеру в базе.");
     }
-    else
-        QMessageBox::information(this, "OK", "Для удаления записи щелкните по номеру в базе.");
+    catch(const char *str_err)
+    {
+        QMessageBox::critical(this, tr("Oшибка"), str_err);
+    }
 }
 
 void technic::on_btn_add_clicked()
@@ -119,6 +128,8 @@ void technic::on_btn_add_clicked()
 
 void technic::on_btn_change_clicked()
 {
+    try
+    {
     int row = ui->tbl_details->selectionModel()->currentIndex().column();
     if (row == 0)
     {
@@ -127,10 +138,10 @@ void technic::on_btn_change_clicked()
                                  QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok)
         {
             QString str = "select name, price, firm, type, info from details_info where id = " + QString::number(val);
-            QSqlQuery *qr = new QSqlQuery(str, QSqlDatabase::database(work_base));
-            qr->exec();
-            qr->next();
-            if (qr->isValid())
+            QSqlQuery *qr = new QSqlQuery(QSqlDatabase::database(work_base));
+            if (!qr->exec(str))
+                throw qr->lastError().text().toStdString().c_str();
+            if (qr->next())
             {
                 std::vector<QString> vec;
                 vec.push_back(qr->value(0).toString());
@@ -139,18 +150,24 @@ void technic::on_btn_change_clicked()
                 vec.push_back(qr->value(3).toString());
                 vec.push_back(qr->value(4).toString());
                 add_detail *temp = new add_detail();
+                delete qr;
                 temp->SetParmsOnForm(vec, val);
                 temp->show();
             }
             else
             {
                 delete qr;
-                return;
+                throw qr->lastError().text().toStdString().c_str();
             }
         }
     }
     else
         QMessageBox::information(this, "OK", "Для изменения записи щелкните по номеру в базе.");
+    }
+    catch(const char * str_err)
+    {
+        QMessageBox::critical(this, tr("Ошибка"), str_err);
+    }
 }
 
 void technic::on_btn_order_clicked()

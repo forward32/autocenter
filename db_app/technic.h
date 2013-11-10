@@ -28,15 +28,11 @@ private slots:
 
     void on_btn_start_clicked();
 
-    void on_tbl_details_activated(const QModelIndex &index);
-
     void on_tbl_details_clicked(const QModelIndex &index);
 
     void on_btn_del_clicked();
 
     void on_btn_add_clicked();
-
-    void on_btn_add_clicked(bool checked);
 
     void on_btn_change_clicked();
 

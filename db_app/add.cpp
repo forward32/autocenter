@@ -35,18 +35,20 @@ void Add::SetCondition(const QString &condition_val)
     condition = condition_val;
 }
 
-QString Add::GetLineForGeneralTable(const int &id)
+QString Add::GetLineForGeneralTable()
 {
-    QString result = "insert into general_car_info values (" + QString::number(id) + ", \""+ firm +"\", \"" + model + "\", " + QString::number(year)+
-            ", " + QString::number(power) + ", " + QString::number(price) + ", \"" + engine + "\", \"" + present + "\")";
+    QString result = "insert into general_car_info (firm, model, year, power, price, eng_type, present) values ('"+
+            firm +"\', \'" + model + "\', " + QString::number(year)+ ", " + QString::number(power) + ", "
+            + QString::number(price) + ", \'" + engine + "\', \'" + present + "\')";
     return result;
 }
 
-QString Add::GetLineForFullTable(const int &id, const int &key)
+QString Add::GetLineForFullTable(const int &key)
 {
-    QString result = "insert into full_car_info values (" + QString::number(id) + "," + QString::number(key) + ", \"" + body + "\", \"" + drive + "\", \"" +
-            rudder + "\", \"" + color + "\", \"" + condition + "\", " + QString::number(cond) + ", " + QString::number(tv) + ", " +
-            QString::number(navig) + ", " + QString::number(outgo) + ")";
+    QString result = "insert into full_car_info (id_gen_car, body_type, drive_type, rudder_type, color, condition_type, conditioner, tv, navigation, outgo) values ("+
+            QString::number(key) + ",'" + body + "', '" + drive + "', '" +
+            rudder + "', '" + color + "', '" + condition + "', '" + cond + "','"+tv + "', '"
+            + navig + "', " + QString::number(outgo) + ")";
     return result;
 }
 
@@ -87,12 +89,9 @@ void Add::SetYear(const int &year_val)
 
 void Add::SetExtraParam(const QString &conder_val, const QString &tv_val, const QString &navig_val)
 {
-    bool flag = TrueOrFalse(conder_val);
-    if (flag) cond = 1; else cond = 0;
-    flag = TrueOrFalse(tv_val);
-    if (flag) tv = 1; else tv = 0;
-    flag = TrueOrFalse(navig_val);
-    if (flag) navig = 1; else navig = 0;
+    cond = conder_val;
+    navig = navig_val;
+    tv = tv_val;
 }
 
 bool Add::TrueOrFalse(const QString &_val)
@@ -167,15 +166,15 @@ QString Add::GetCondition() const
 
 QString Add::GetCond() const
 {
-    return cond == true ? "1":"0";
+    return cond;
 }
 
 QString Add::GetTV() const
 {
-    return tv == true ? "1":"0";
+    return tv;
 }
 
 QString Add::GetNavigation() const
 {
-    return navig == true ? "1":"0";
+    return navig;
 }

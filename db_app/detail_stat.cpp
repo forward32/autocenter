@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include "extra.h"
 #include "base_name.h"
+#include <QSqlError>
 
 detail_stat::detail_stat(QWidget *parent) :
     QWidget(parent),
@@ -89,29 +90,35 @@ void detail_stat::on_btn_del_clicked()
 
 void detail_stat::on_stat_tbl_clicked(const QModelIndex &index)
 {
-    int row = ui->stat_tbl->selectionModel()->currentIndex().column();
-    if (row == 6)
+    try
     {
-        QString str = "select name, price, firm, type, info from details_info where id = " +
-                ui->stat_tbl->selectionModel()->currentIndex().data().toString();
-        QSqlQuery *q = new QSqlQuery(str, QSqlDatabase::database(work_base));
-        q->exec();
-        q->next();
-        if (q->isValid())
+        (void)index;
+        int row = ui->stat_tbl->selectionModel()->currentIndex().column();
+        if (row == 6)
         {
-            str.clear();
-            str = "==Характеристика проданной детали==\n\n-Наименование: " + q->value(0).toString() +
-                    "\nЦена: " + q->value(1).toString() + "\nФирма-производитель: " + q->value(2).toString() +
-                    "\nТип изделия: " + q->value(3).toString() + "\nДополнительная инормация:\n" + q->value(4).toString();
-            QMessageBox::information(this, "Ok", str);
+            QString str = "select name, price, firm, type, info from details_info where id = " +
+                    ui->stat_tbl->selectionModel()->currentIndex().data().toString();
+            QSqlQuery *q = new QSqlQuery(QSqlDatabase::database(work_base));
+            if (!q->exec(str))
+                throw q->lastError().text().toStdString().c_str();
+            if (q->next())
+            {
+                str.clear();
+                str = "==Характеристика проданной детали==\n\n-Наименование: " + q->value(0).toString() +
+                        "\nЦена: " + q->value(1).toString() + "\nФирма-производитель: " + q->value(2).toString() +
+                        "\nТип изделия: " + q->value(3).toString() + "\nДополнительная инормация:\n" + q->value(4).toString();
+                delete q;
+                QMessageBox::information(this, "Ok", str);
+            }
+            else
+                throw q->lastError().text().toStdString().c_str();
         }
         else
-             QMessageBox::critical(this, "Eror", "Произошел сбой.");
-
-        delete q;
+            if (row != 0)
+                QMessageBox::information(this, "Ok", "Для получения полной информации щелкните по ID хар-ки детали.");
     }
-    else
-        if (row != 0)
-            QMessageBox::information(this, "Ok", "Для получения полной информации щелкните по ID хар-ки детали.");
-
+    catch(const char *str_err)
+    {
+        QMessageBox::critical(this, tr("Oшибка"), str_err);
+    }
 }

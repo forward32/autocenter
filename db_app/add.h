@@ -10,8 +10,8 @@ public:
     ~Add();
 
     bool TrueOrFalse(const QString &_val);
-    QString GetLineForGeneralTable(const int &id);
-    QString GetLineForFullTable(const int &id, const int &key);
+    QString GetLineForGeneralTable();
+    QString GetLineForFullTable(const int &key);
 
         // Set values
     void SetName(const QString &firm_val, const QString &model_val);
@@ -47,10 +47,9 @@ public:
     QString GetNavigation() const;
 
 private:
-    QString firm, model, engine, body, rudder, color, drive, condition, present;
+    QString firm, model, engine, body, rudder, color, drive, condition, present, cond, tv, navig;
     double outgo;
     int power, year, price;
-    bool cond, tv, navig;
 };
 
 #endif // ADD_H

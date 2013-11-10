@@ -53,30 +53,30 @@ int Search::GetPower() const
 QString Search::GetSearchQuery()
 {
     QString query;
-    if (!start_price) start_price = 0;
+    if (!start_price) start_price = 1;
     if (!stop_price) stop_price = MAX_PRICE;
     if (firm == "" && model == "")
         query = "select * from general_car_info where power "+ ch +
-             QString::number(power) + " and year >= " + QString::number(start_year) + " and year <= " + QString::number(stop_year)
-                + " and price >= " + QString::number(start_price) + " and price <= " + QString::number(stop_price) + " and present = \"" +
-                present + "\"";
+                QString::number(power) + " and year >= " + QString::number(start_year) + " and year <= " + QString::number(stop_year)
+                + " and price >= " + QString::number(start_price) + "and price <= " + QString::number(stop_price) + " and present = \'" +
+                present + "\'";
     else
         if (firm == "" && model != "")
             query = "select * from general_car_info where model = \'" + model + "\' and power "+ ch +
                      QString::number(power) + " and year >= " + QString::number(start_year) + " and year <= " + QString::number(stop_year)
-                    + " and price >= " + QString::number(start_price) + " and price <= " + QString::number(stop_price) + " and present = \"" +
-                    present + "\"";
+                    + " and price >= " + QString::number(start_price) + " and price <= " + QString::number(stop_price) + " and present = \'" +
+                    present + "\'";
          else
             if (firm != "" && model == "")
                 query = "select * from general_car_info where firm = \'" + firm + "\' and power "+ ch +
                          QString::number(power) + " and year >= " + QString::number(start_year) + " and year <= " + QString::number(stop_year)
-                        + " and price >= " + QString::number(start_price) + " and price <= " + QString::number(stop_price) + " and present = \"" +
-                        present + "\"";
+                        + " and price >= " + QString::number(start_price) + " and price <= " + QString::number(stop_price) + " and present = \'" +
+                        present + "\'";
              else
                 query = "select * from general_car_info where firm = \'" + firm + "\' and model = \'" + model + "\' and power "+ ch +
                         QString::number(power) + " and year >= " + QString::number(start_year) + " and year <= " + QString::number(stop_year) + " and price >= " +
-                        QString::number(start_price) + " and price <= " + QString::number(stop_price) + " and present = \"" +
-                        present + "\"";
+                        QString::number(start_price) + " and price <= " + QString::number(stop_price) + " and present = \'" +
+                        present + "\'";
     return query;
 }
 

@@ -1,30 +1,29 @@
-null	1	Sedan	back	left	White	Best	1	1	1	12.5
-null	2	Sedan	back	left	Black	Best	1	0	1	11
-null	3	H-back	front	left	Red	Best	1	0	1	9.8
-null	4	Avant	both	left	White	Best	1	1	1	13
-null	5	Sedan	front	left	Blue	Good	1	0	0	10
-null	6	Sedan	front	left	Red	Good	1	0	0	11
-null	7	Sedan	both	left	Black	Best	1	1	1	17
-null	8	Avant	front	left	Black	Middle	1	0	0	10
-null	9	Miniven	front	left	White	Good	1	0	0	8.5
-null	10	H-back	front	left	White	Good	0	0	0	7
-null	11	Sedan	front	left	Black	Best	1	0	0	9
-null	12	H-back	front	left	White	Middle	0	0	0	8
-null	13	Sedan	front	left	Green	Good	1	0	0	10.5
-null	14	Miniven	front	left	Green	Good	1	0	0	6.5
-null	15	Miniven	front	left	Blue	Good	1	0	0	8
-null	16	Sedan	front	left	Black	Best	1	0	0	10
-null	17	Sedan	both	left	White	Good	1	0	0	13.5
-null	18	H-back	front	left	Red	Middle	0	0	0	5
-null	19	Jeep	both	left	Black	Best	1	0	1	12
-null	20	Jeep	both	left	Black	Best	1	0	1	10
-null	21	Jeep	both	left	Gray	Best	1	1	1	14.5
-null	22	Jeep	both	left	Gray	Best	1	1	1	11.5
-null	23	Jeep	both	left	Black	Best	1	1	1	15
-null	24	H-back	front	left	White	Middle	1	0	0	10
-null	25	Sedan	both	left	Black	Good	1	0	1	13.5
-null	26	Avant	front	left	Blue	Best	1	1	1	12
-null	27	Sedan	front	left	White	Best	1	0	1	12
-null	28	Sedan	front	left	Red	Best	1	0	0	11
-null	29	H-back	front	left	Gold	Best	1	0	0	7.8
-null	30	H-back	front	left	Red	Best	1	0	1	9	
+1	Седан	Задний	Левый	Белый	Отличное	Да	Да	Да	12.5
+2	Седан	Задний	Левый	Черный	Отличное	Да	Нет	Да	11
+3	Хетч-бек	Передний	Левый	Красный	Отличное	Да	Нет	Да	9.8
+4	Авант	Полный	Левый	Белый	Отличное	Да	Да	Да	13
+5	Седан	Передний	Левый	Синий	Хорошее	Да	Нет	Нет	10
+6	Седан	Передний	Левый	Красный	Хорошее	Да	Нет	Нет	11
+7	Седан	Полный	Левый	Черный	Отличное	Да	Да	Да	17
+8	Седан	Передний	Левый	Черный	Среднее	Да	Нет	Нет	10
+9	Минивен	Передний	Левый	Белый	Хорошее	Да	Нет	Нет	8.5
+10	Хетч-бек	Передний	Левый	Белый	Хорошее	Нет	Нет	Нет	7
+11	Седан	Передний	Левый	Черный	Отличное	Да	Нет	Нет	9
+12	Хетч-бек	Передний	Левый	Белый	Среднее	Нет	Нет	Нет	8
+13	Седан	Передний	Левый	Зеленый	Хорошее	Да	Нет	Нет	10.5
+14	Минивен	Передний	Левый	Зеленый	Хорошее	Да	Нет	Нет	6.5
+15	Минивен	Передний	Левый	Синий	Хорошее	Да	Нет	Нет	8
+16	Седан	Передний	Левый	Черный	Отличное	Да	Нет	Нет	10
+17	Седан	Полный	Левый	Белый	Хорошее	Да	Нет	Нет	13.5
+18	Хетч-бек	Передний	Левый	Красный	Среднее	Нет	Нет	Нет	5
+19	Джип	Полный	Левый	Черный	Отличное	Да	Нет	Да	12
+20	Джип	Полный	Левый	Черный	Отличное	Да	Нет	Да	10
+21	Джип	Полный	Левый	Серый	Отличное	Да	Да	Да	14.5
+22	Джип	Полный	Левый	Золотой	Отличное	Да	Да	Да	11.5
+23	Джип	Полный	Левый	Серебрянный	Отличное	Да	Да	Да	15
+24	Хетч-бек	Передний	Левый	Белый	Среднее	Да	Нет	Нет	10
+26	Авант	Передний	Левый	Синий	Отличное	Да	Да	Да	12
+27	Седан	Передний	Левый	Розовый	Отличное	Да	Нет	Да	12
+28	Седан	Передний	Левый	Красный	Отличное	Да	Нет	Нет	11
+29	Хетч-бек	Передний	Левый	Золотой	Отличное	Да	Нет	Нет	7.8
+30	Хетч-бек	Передний	Левый	Красный	Отличное	Да	Нет	Да	9

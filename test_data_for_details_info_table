@@ -1,11 +1,9 @@
-null	oil	1350	Motor+	oils	Motor+ oil for best working your engine
-null	oil-filter	240	Bosh	filters	Oil filter for turbo-diesel engines
-null	candle-#123	250	Bosh	engine-details	Candles for Volvo AWD engines	
-null	candle-#245	340	JNG	engine-details	Candles for Audi and BMW turbo-diesel engines
-null	candle-#98	145	GoodWay	engine-details	Candles	for Lada and Vaz engines
-null	oil-filter	350	Bosh	filters	Oil filter for Audi Q-series engines after 2010 year
-null	oil	1900	Manol	oils	Oil for 4-tacts engines, syntetic
-null	oil	2350	Xado	oils	Oil for 2-tacts engines, syntetic
-null	brake pads	750	-	brake pads	-
-null	brake pads	1200	Bosh	brake pads	Brake pads for quatro car aftre 2011 year
-null	air-filter	890	Filtech	filters	Air filter for Kia and Hyindau			
+Масло	1350	Manol	Моторные масла	Моторное масло, полусинтетика, для отечественных авто
+Масленный фильтер	240	Bosh	Фильтры	Масленный фильтр для Audi
+Свеча-123	250	Bosh	Детали двигателя	Свечи Bosh тонкие, удлиненные
+Свеча-245	340	NGK	Детали двигателя	Свечи Bosh стандартные
+Масленные фильтр	350	Bosh	Фильтры	Масленный фильтр для Bmw
+Масло	1900	Motor+	Моторные масла	Моторное масло для 4-х тактных двигателей
+Масло	2350	Xado	Моторные масла	Моторное масло для 2-х тактных двигателей
+Тормозные колодки	750	-	Тормозные колодки	Тормозные колодки для ВАЗ 2170 и подобных
+Тормозные колодки	1200	Bosh	Тормозные колодки	Тормозные колодки для японских иномарок
