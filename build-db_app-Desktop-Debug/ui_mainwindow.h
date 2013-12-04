@@ -276,7 +276,7 @@ public:
 
         chbox_from = new QCheckBox(layoutWidget);
         chbox_from->setObjectName(QStringLiteral("chbox_from"));
-        chbox_from->setChecked(true);
+        chbox_from->setChecked(false);
 
         horizontalLayout_2->addWidget(chbox_from);
 

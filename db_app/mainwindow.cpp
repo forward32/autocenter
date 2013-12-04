@@ -87,19 +87,31 @@ void MainWindow::on_btn_search_car_clicked()
         temp_search->SetYears(ui->cmbstart->currentText().toInt(), ui->cmbstop->currentText().toInt());
         temp_search->SetPower(ui->edtpower->text().toInt());
         temp_search->SetPrice(ui->edt_start_price->text().toInt(), ui->edt_stop_price->text().toInt());
-        if (ui->check_present->isChecked()) temp_search->SetPresent("Yes");
-        else temp_search->SetPresent("No");
+        if (ui->check_present->isChecked()) temp_search->SetPresent("Да");
+        else temp_search->SetPresent("Нет");
 
         if ((temp_search->GetPower() < 50 || temp_search->GetPower() > 1001) && ui->edtpower->text() != "")
-            throw("Проверьте правильность ввода мощности. Мощность не должна быть отрицательной величиной или текстом.");
+            throw("Проверьте правильность ввода мощности. Мощность не должна быть числом в диапазоне от 50 до 1001.");
 
         if (ui->chbox_from->isChecked())
+        {
             temp_search->SetCh(">=");
-        else
             if (ui->edtpower->text() == "")
                 throw("Если вы меняете флаг \"от-до\", укажите границу мощности искомых записей.");
-             else
+        }
+        else
+            if (ui->chbox_to->isChecked())
+            {
                 temp_search->SetCh("<=");
+                if (ui->edtpower->text() == "")
+                    throw("Если вы меняете флаг \"от-до\", укажите границу мощности искомых записей.");
+            }
+            else
+            {
+                temp_search->SetCh(">=");
+                temp_search->SetPower(50);
+            }
+
 
             // update data in table
         QString query = temp_search->GetSearchQuery();
@@ -349,22 +361,24 @@ int MainWindow::GetMaxNumberSale(const QString &tbl, const QString &column)
 
 void MainWindow::WriteToSales(const QString &data, const QString &time, QSqlQuery *query, const QString &name, const QString &surname)
 {
-    QString str_query = "insert into sales_car values(null, \'"+data+"\',\'"+ time + "\',\'" + name+" "+surname+"\',\'"+
+    QString str_query = "insert into sales_car (data, time, seller_info, firm, model, price, id_full_info, sale_number) values(\'"+data+"\',\'"+ time + "\',\'" + name+" "+surname+"\',\'"+
             query->value(1).toString()+"\',\'"+query->value(2).toString()+"\',\'"+
             QString::number(query->value(3).toInt())+"\',"+QString::number(query->value(0).toInt())+","+
             QString::number(GetMaxNumberSale("sales_car", "sale_number"))+")";
     QSqlQuery *temp = new QSqlQuery(QSqlDatabase::database(work_base));
-    temp->exec(str_query);
+    if (!temp->exec(str_query))
+        throw temp->lastError().text().toStdString().c_str();
     delete temp;
 }
 
 void MainWindow::WriteToSalesDetail(const QString &data, const QString &time, QSqlQuery *query, const QString &name, const QString &surname, const int cnt)
 {
     int cost = query->value(2).toInt() * cnt;
-    QString str_query = "insert into sales_detail values(null, \'"+data+"\',\'"+ time + "\',\'" + name+" "+surname+"',"+
+    QString str_query = "insert into sales_detail (data, time, tech_info, price, detail_count, id_info) values(\'"+data+"\',\'"+ time + "\',\'" + name+" "+surname+"',"+
             QString::number(cost) + "," + QString::number(cnt) + "," + query->value(0).toString() + ")";
     QSqlQuery *temp = new QSqlQuery(QSqlDatabase::database(work_base));
-    temp->exec(str_query);
+    if (!temp->exec(str_query))
+        throw temp->lastError().text().toStdString().c_str();
     delete temp;
 }
 
