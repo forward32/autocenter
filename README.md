@@ -1,4 +1,6 @@
-autocenter_db
-=============
+It is my project for the course "Database" in BMSTU.
+This is application for working with database of cars.
 
-It is my project for the course "Database"
+For working you need:
+-QT + QPSQL
+-PostgreSQL
